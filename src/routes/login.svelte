@@ -18,6 +18,12 @@
         loading = false
       }
     }
+
+    async function signInWithGoogle() {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      })
+    }
   </script>
   
   <div class="row flex-center flex">
@@ -42,4 +48,6 @@
         </div>
       </form>
     </div>
+
+    <button on:click={signInWithGoogle}>Sign in with google</button>
   </div>
