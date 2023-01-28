@@ -77,7 +77,7 @@
     </div>
     <div>
       <button type="submit" class="button primary block" disabled={loading}>
-        {loading ? 'Saving ...' : 'Update profile'}
+        {loading ? 'Saving ...' : 'Save changes'}
       </button>
     </div>
     <button type="button" class="button block" on:click={() => supabase.auth.signOut()}>

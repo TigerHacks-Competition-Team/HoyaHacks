@@ -21,7 +21,7 @@
 
 <div>
     {#each notes as note}
-        <p>{note.notes}</p>
         <a href={note.video_link}>{note.video_link}</a>
+        <p>{note.notes}</p>
     {/each}
 </div>

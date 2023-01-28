@@ -5,14 +5,12 @@
     import Account from './account.svelte'
     import { goto } from '$app/navigation';
   
-    let session: AuthSession
+    let session: AuthSession | null
     let loaded: boolean = false
   
     onMount(() => {
       supabase.auth.getSession().then(({ data }) => {
-        if (data.session) {
-            session = data.session
-        }
+        session = data.session
         
         loaded = true
       })
@@ -25,6 +23,7 @@
 
 <div class="container" style="padding: 50px 0 100px 0">
     {#if session}
+    <button on:click={() => goto("/")}>Back</button>
     <Account {session} />
     {:else if loaded}
     <button on:click={() => goto("/")}>Not signed in, go back</button>
