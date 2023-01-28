@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import type { AuthSession } from "@supabase/supabase-js";
     import { supabase } from "../supabase";
+    import { goto } from '$app/navigation'
   
     export let session: AuthSession;
   
@@ -80,7 +81,7 @@
         {loading ? 'Saving ...' : 'Save changes'}
       </button>
     </div>
-    <button type="button" class="button block" on:click={() => supabase.auth.signOut()}>
+    <button type="button" class="button block" on:click={() => supabase.auth.signOut().then(() => goto('/'))}>
       Sign Out
     </button>
   </form>

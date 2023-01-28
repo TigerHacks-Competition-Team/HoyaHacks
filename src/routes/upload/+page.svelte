@@ -5,13 +5,10 @@
     import { goto } from '$app/navigation'
 
     let session: AuthSession | null
-    let loaded: boolean = false
   
     onMount(() => {
       supabase.auth.getSession().then(({ data }) => {
         session = data.session
-
-        loaded = true
       })
   
       supabase.auth.onAuthStateChange((_event, _session) => {
@@ -25,7 +22,5 @@
     <button on:click={() => goto("/")}>Back</button>
     <input type="file" />
     <input type="text" />
-    {:else if loaded}
-    <button on:click={() => goto("/")}>Not signed in, go back</button>
     {/if}
 </div>
