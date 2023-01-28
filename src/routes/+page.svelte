@@ -2,8 +2,7 @@
     import { onMount } from 'svelte'
     import { supabase } from './supabase'
     import type { AuthSession } from '@supabase/supabase-js'
-    import Account from './account.svelte'
-    import Auth from './login.svelte'
+    import Login from './login.svelte'
     import Notes from './notes.svelte'
   
     let session: AuthSession
@@ -21,10 +20,8 @@
   
   <div class="container" style="padding: 50px 0 100px 0">
     {#if !session}
-    <Auth />
+    <Login />
     {:else}
-    <Account {session} />
+    <Notes {session}/>
     {/if}
-
-    <Notes/>
   </div>
