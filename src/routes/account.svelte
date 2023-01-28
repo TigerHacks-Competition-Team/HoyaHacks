@@ -7,10 +7,9 @@
   
     let loading = false
     let username: string | null = null
-    let website: string | null = null
-    let avatarUrl: string | null = null
   
     onMount(() => {
+      addUsername()
       getProfile()
     })
   
@@ -20,8 +19,8 @@
         const { user } = session
   
         const { data, error, status } = await supabase
-          .from('profiles')
-          .select('username, website, avatar_url')
+          .from('users')
+          .select('username')
           .eq('id', user.id)
           .single()
   
@@ -29,8 +28,6 @@
   
         if (data) {
           username = data.username
-          website = data.website
-          avatarUrl = data.avatar_url
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -40,6 +37,12 @@
         loading = false
       }
     }
+
+    async function addUsername() {
+      await supabase
+        .from('users')
+        .insert([{'id': session.user.id, 'username': session.user.email?.split("@")[0]}])
+    }
   
     const updateProfile = async () => {
       try {
@@ -48,13 +51,10 @@
   
         const updates = {
           id: user.id,
-          username,
-          website,
-          avatar_url: avatarUrl,
-          updated_at: new Date().toISOString(),
+          username: username,
         }
   
-        let { error } = await supabase.from('profiles').upsert(updates)
+        let { error } = await supabase.from('users').upsert(updates)
   
         if (error) {
           throw error
@@ -72,12 +72,8 @@
   <form on:submit|preventDefault={updateProfile} class="form-widget">
     <div>Email: {session.user.email}</div>
     <div>
-      <label for="username">Name</label>
+      <label for="username">Username</label>
       <input id="username" type="text" bind:value={username} />
-    </div>
-    <div>
-      <label for="website">Website</label>
-      <input id="website" type="text" bind:value={website} />
     </div>
     <div>
       <button type="submit" class="button primary block" disabled={loading}>

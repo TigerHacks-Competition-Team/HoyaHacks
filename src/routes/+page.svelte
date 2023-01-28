@@ -4,6 +4,7 @@
     import type { AuthSession } from '@supabase/supabase-js'
     import Account from './account.svelte'
     import Auth from './login.svelte'
+    import Notes from './notes.svelte'
   
     let session: AuthSession
   
@@ -24,4 +25,6 @@
     {:else}
     <Account {session} />
     {/if}
+
+    <Notes/>
   </div>
