@@ -1,0 +1,10 @@
+// '@use' so that it can be overridden, but default values can be used still
+@use "bulma/sass/utilities/_all.sass" as defaults;
+
+// CUSTOM VARIABLES
+$bg1: #2B2B2B;
+
+// OVERRIDE VARIABLES
+$primary: #71DBF2;
+
+$family-sans-serif: "Public Sans", "Fira Sans", "Ubuntu", defaults.$family-sans-serif;

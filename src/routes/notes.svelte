@@ -19,9 +19,7 @@
 	getNotes();
 </script>
 
-<div>
-	{#each notes as note}
-		<a href={note.video_link}>{note.video_link}</a>
-		<p>{note.notes}</p>
-	{/each}
-</div>
+{#each notes as note}
+	<a href={note.video_link}>{note.video_link}</a>
+	<p>{note.notes}</p>
+{/each}
