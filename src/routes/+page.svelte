@@ -23,6 +23,12 @@
             session = _session;
         });
     });
+
+    function signInWithGoogle() {
+        supabase.auth.signInWithOAuth({
+            provider: "google",
+        });
+    }
 </script>
 
 <nav class="navbar not-scrolled">
@@ -91,14 +97,14 @@
 <div class="section" id="section-3">
     <div id="login-form">
         <h1 class="title is-1">Get Started</h1>
-        <button class="button is-large">
+        <button class="button is-large" on:click={signInWithGoogle}>
             <span class="icon fake-icon is-medium">
                 <img src="google.svg" alt="" />
             </span>
             <span>Sign up with Google</span>
         </button>
         <span class="divider">Already a member?</span>
-        <button class="button is-large">
+        <button class="button is-large" on:click={signInWithGoogle}>
             <span class="icon fake-icon is-medium">
                 <img src="google.svg" alt="" />
             </span>
@@ -123,14 +129,4 @@
             </p>
         </div>
     </div>
-</div>
-
-<div class="is-hidden">
-    {#if session}
-        <button on:click={() => goto("/account")}>Account</button>
-        <button on:click={() => goto("/upload")}>Upload</button>
-        <Notes {session} />
-    {:else if loaded}
-        <Login />
-    {/if}
 </div>
