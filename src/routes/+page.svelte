@@ -5,6 +5,7 @@
 	import Login from "./login.svelte";
 	import Notes from "./notes.svelte";
 	import { goto } from "$app/navigation";
+	import "../style/landing.scss";
 
 	let session: AuthSession | null;
 	let loaded: boolean = false;
@@ -22,7 +23,7 @@
 	});
 </script>
 
-<div class="container" style="padding: 50px 0 100px 0">
+<div>
 	{#if session}
 		<button on:click={() => goto("/account")}>Account</button>
 		<button on:click={() => goto("/upload")}>Upload</button>
