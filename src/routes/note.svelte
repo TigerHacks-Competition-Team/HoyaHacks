@@ -6,7 +6,7 @@
 
     const ytRegex = /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
     let matches = note.video_link?.match(ytRegex)
-    let id = matches ? matches[1] : null;
+    let ytId = matches ? matches[1] : null;
 
         let dataShort = note.notes;
     if (dataShort && dataShort.length > 150) {
@@ -25,14 +25,14 @@
     on:click={() => modalFunction(note)}
     on:keydown={e => {if (e.key == "Enter") modalFunction(note)}}
 >
-    <img src="https://i.ytimg.com/vi/{id}/hq720.jpg" alt="" class="thumbnail">
+    <img src="https://i.ytimg.com/vi/{ytId}/hq720.jpg" alt="" class="thumbnail">
     <div class="note-info is-flex is-flex-direction-column my-4">
-        <p class="title is-5">{note.title || "Unknown Video"}</p>
+        <p class="title is-5">{note.title || "Generating Title..."}</p>
         <a href="{note.video_link}">Source: {note.video_link}</a>
         <p class="created">Created on {date}</p>
         <p class="created">{note.state}</p>
         {#if loading}
-            <progress class="progress" value="100" max="100">Loading...</progress>
+            <div class="loading"></div>
         {:else}
             <p class="preview">{dataShort}</p>
             <!-- <p>{transcription}</p> -->

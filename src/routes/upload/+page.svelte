@@ -16,6 +16,8 @@
     let notes: Array<any> = [];
     let youtubeURL: string = "";
     let videoFileInput: HTMLInputElement;
+    let selected: any = null;
+
 
     $:sortedNotes = notes.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
@@ -192,7 +194,7 @@
     }
 
     function loadNoteModal(note: Object) {
-        console.log(note);
+        /*console.log(note);
         // load data into object / page
         modalData.src = note.video_link;
         modalData.embedSrc = "https://www.youtube.com/embed/" + note.id;
@@ -202,7 +204,11 @@
         modalData.transcript = note.transcription || "transcriptifier";
 
         const modal = document.getElementById("note-modal");
-        modal?.classList.add("is-active");
+        modal?.classList.add("is-active");*/
+        selected = note
+        const ytRegex = /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
+        let matches = note.video_link?.match(ytRegex)
+        selected.ytId = matches ? matches[1] : null;
     }
 
     function closeModal(e) {
@@ -210,22 +216,26 @@
         if (e.key) {
              if (e.key == "Escape") {
                 modal?.classList.remove("is-active");
+                selected = null
              }
         } else {
             modal?.classList.remove("is-active");
+            selected = null
         }
     }
 </script>
 
-<div class="modal" id="note-modal">
+{#if selected}
+<div class="modal is-active" id="note-modal">
     <div class="modal-background" on:click={closeModal} on:keydown={closeModal}></div>
     <div class="modal-content">
         <div class="card">
-            <iframe src={modalData.embedSrc} frameborder="0" title={modalData.title}></iframe>
+            <img src="https://i.ytimg.com/vi/{selected.ytId}/hq720.jpg" alt="" class="thumbnail">
+            <!-- <iframe src={selected.embedSrc} frameborder="0" title={selected.title}></iframe> -->
 
-            <h3 class="title is-3">{modalData.title}</h3>
-            <a class="link" href={modalData.src}>Source: {modalData.src}</a>
-            <p class="created">Created on {modalData.created}</p>
+            <h3 class="title is-3">{selected.title}</h3>
+            <a class="link" href={selected.video_link}>Source: {selected.video_link}</a>
+            <p class="created">Created on {selected.created}</p>
 
             <div class="buttons has-addons is-centered">
                 <button
@@ -233,7 +243,7 @@
                 on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
-                        modalField.innerText = modalData.data;
+                        modalField.innerText = selected.notes;
                         e.currentTarget.classList.add("is-primary");
                         e.currentTarget.classList.add("is-selected");
                         document.getElementsByClassName("transcript-button")[0].classList.remove("is-primary")
@@ -245,7 +255,7 @@
                 on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
-                        modalField.innerText = modalData.transcript;
+                        modalField.innerText = selected.transcription;
                         e.currentTarget.classList.add("is-primary");
                         e.currentTarget.classList.add("is-selected");
                         document.getElementsByClassName("summary-button")[0].classList.remove("is-primary")
@@ -254,12 +264,12 @@
                 }}>Transcript</button>
             </div>
     
-            <p id="modal-field">{modalData.data}</p>
+            <p id="modal-field"></p>
         </div>
     </div>
     <button class="modal-close is-large" aria-label="close" on:click={closeModal}></button>
 </div>
-
+{/if}
 <div id="video-bar" class="level">
     <div class="level-left mx-2">
         <a class="level-item" href="/">
