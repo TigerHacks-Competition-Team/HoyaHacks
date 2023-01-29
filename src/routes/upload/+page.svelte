@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { queryPrompt } from './../../api/gpt.js';
     import { onMount } from "svelte";
     import { listeningForStateChange, supabase, updateNote, updateNotesState, uploadVideoToDB } from "../supabase";
     import type { AuthSession } from "@supabase/supabase-js";
