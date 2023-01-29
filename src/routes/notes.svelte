@@ -1,17 +1,25 @@
 <script lang="ts">
-    import { supabase } from "./supabase";
+	import { supabase } from "./supabase";
+	import type { AuthSession } from "@supabase/supabase-js";
 
-    async function getNotes() {
-        let { data, error } = await supabase
-            .from('notes')
-            .select()
+	export let session: AuthSession;
+	let notes: ArrayLike<any> = [];
 
-        console.log(data)
-    }
+	async function getNotes() {
+		let { data, error } = await supabase
+			.from("notes")
+			.select()
+			.eq("user", session.user.id);
 
-    getNotes()
+		if (data) {
+			notes = data;
+		}
+	}
+
+	getNotes();
 </script>
 
-<div>
-    
-</div>
+{#each notes as note}
+	<a href={note.video_link}>{note.video_link}</a>
+	<p>{note.notes}</p>
+{/each}

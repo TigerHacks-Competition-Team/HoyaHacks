@@ -1,0 +1,14 @@
+@import "vars.scss";
+
+// global app styles
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+
+    background-color: $bg1
+}
+
+html {
+    scroll-behavior: smooth;
+}
