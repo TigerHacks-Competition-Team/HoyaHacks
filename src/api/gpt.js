@@ -3,7 +3,7 @@
  * @param {String} prompt 
  * @returns 
  */
-const queryPrompt = async (prompt) => {
+export const queryPrompt = async (prompt) => {
     const response = await fetch(
         `https://api.openai.com/v1/completions`,
         {

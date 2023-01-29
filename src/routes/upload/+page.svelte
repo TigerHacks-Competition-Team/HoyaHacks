@@ -3,6 +3,9 @@
 	import { supabase } from "../supabase";
 	import type { AuthSession } from "@supabase/supabase-js";
 	import { goto } from "$app/navigation";
+    import { startTranscription } from '../../api/transcription';
+    import { queryPrompt } from '../../api/gpt';
+    console.log(import.meta.env)
 
 	let session: AuthSession | null;
     let youtubeURL: string = ""
@@ -17,8 +20,21 @@
 		});
 	});
 
+    async function createNotes(notes: string, link: string) {
+        const { data } = await supabase
+            .from('notes')
+            .insert({user: session?.user.id, notes: notes, video_link: link})
+            .select('id')
+
+        if (data) return data[0].id
+
+        return
+    }
+
     async function uploadYoutubeVideo() {
         if (!youtubeURL.match(/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g)) return
+
+        const notesRowID = await createNotes("bruh", "bruh")
 
         const resJson = await fetch('https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3', {
 			method: 'POST',
@@ -31,7 +47,7 @@
 			})
 		}).then((res) => res.json())
 
-        console.log(resJson)
+        await startTranscription(notesRowID, resJson.url).catch(err => console.log(err))
     }
 </script>
 
@@ -46,6 +62,7 @@
         <div>
             <input bind:value={youtubeURL} type="text" placeholder="Youtube link..." />
             <button on:click={uploadYoutubeVideo}>Upload</button>
+            <p>{import.meta.env}</p>
         </div>
 	{/if}
 </div>
