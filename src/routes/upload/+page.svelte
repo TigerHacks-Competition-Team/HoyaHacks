@@ -63,7 +63,8 @@
                     console.log('doing gthe gpt3');
                     await updateNotesState(e.new.id, 'Generating Notes');
                     let note = await queryPrompt(`Prompt: summarize the following using bullet points with section titles: ${e.new.transcription}\nAnswer:`);
-                    let updatedNote = await updateNote({id: e.new.id, notes: note, state: 'Complete'});
+                    let title = await queryPrompt(`Prompt: create a title based on this text: ${note}\nAnswer:`)
+                    let updatedNote = await updateNote({id: e.new.id, notes: note, state: 'Complete', title: title});
                     notes[docIdx] = updatedNote;
                     console.log('fininshed the gpt3');
                 }
@@ -180,13 +181,14 @@
         modalData.src = note.video_link;
         modalData.embedSrc = "https://www.youtube.com/embed/" + note.id;
         modalData.title = note.title || "Unknown Video";
-        modalData.created = formatDate(note.created_at);
+        modalData.created = note.created_at;
         modalData.data = note.notes || "summstury fheree";
         modalData.transcript = note.transcription || "transcriptifier";
 
         const modal = document.getElementById("note-modal");
         modal?.classList.add("is-active");
     }
+
     function closeModal(e) {
         const modal = document.getElementById("note-modal");
         if (e.key) {
@@ -288,3 +290,8 @@
         </div>
     {/if}
 </div>
+<!-- 
+<div id="no-videos">
+    <p class="title is-1 no-videos">No Videos?</p>
+    <p class="subtitle.is-3 no-videos">Try pasting in a YouTube link above to start.</p>
+</div> -->
