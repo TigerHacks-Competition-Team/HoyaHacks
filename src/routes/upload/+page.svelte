@@ -203,18 +203,26 @@
             <div class="buttons has-addons is-centered">
                 <button
                 class="button summary-button is-primary is-selected"
-                on:click={() => {
+                on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
                         modalField.innerText = modalData.data;
+                        e.currentTarget.classList.add("is-primary");
+                        e.currentTarget.classList.add("is-selected");
+                        document.getElementsByClassName("transcript-button")[0].classList.remove("is-primary")
+                        document.getElementsByClassName("transcript-button")[0].classList.remove("is-selected")
                     }
                 }}>Summary</button>
                 <button
                 class="button transcript-button"
-                on:click={() => {
+                on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
                         modalField.innerText = modalData.transcript;
+                        e.currentTarget.classList.add("is-primary");
+                        e.currentTarget.classList.add("is-selected");
+                        document.getElementsByClassName("summary-button")[0].classList.remove("is-primary")
+                        document.getElementsByClassName("summary-button")[0].classList.remove("is-selected")
                     }
                 }}>Transcript</button>
             </div>
