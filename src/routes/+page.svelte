@@ -37,13 +37,10 @@
         <div class="column">
             <div class="info-text">
                 <h1 class="title is-1">
-                    Blah Blah <span class="emphasis">Better.</span>
+                    This is <span class="emphasis">AutoScribe.</span>
                 </h1>
                 <h3 class="subtitle is-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    A revolutionary website that uses natural language processing to help students understand video content.
                 </h3>
                 <button class="button is-primary">Get Started</button>
                 <button class="button">More Info</button>
@@ -98,7 +95,7 @@
     <div class="footer" id="footer">
         <div class="content has-text-centered">
             <p>
-                ProjectName by
+                AutoScribe by
                 <a href="https://github.com/TigerHacks-Competition-Team/">
                     PantheraHacks / TigerHacks.
                 </a>
