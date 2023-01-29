@@ -2,9 +2,16 @@
 @use "bulma/sass/utilities/_all.sass" as defaults;
 
 // CUSTOM VARIABLES
-$bg1: #2B2B2B;
+$bg1: #2b2b2b;
 
 // OVERRIDE VARIABLES
-$primary: #71DBF2;
+$primary: #71dbf2;
+$link: lighten($primary, 15);
 
-$family-sans-serif: "Public Sans", "Fira Sans", "Ubuntu", defaults.$family-sans-serif;
+$scheme-main: #2b2b2b;
+$scheme-main-ter: #222222;
+$scheme-main-bis: #1E1E1E;
+$text: #fff;
+
+$family-sans-serif: "Public Sans", "Fira Sans", "Ubuntu",
+    defaults.$family-sans-serif;
