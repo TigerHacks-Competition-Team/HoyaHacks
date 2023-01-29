@@ -1,3 +1,8 @@
+/**
+ * Function for 
+ * @param {String} prompt 
+ * @returns 
+ */
 const queryPrompt = async (prompt) => {
     const response = await fetch(
         `https://api.openai.com/v1/completions`,
@@ -12,9 +17,9 @@ const queryPrompt = async (prompt) => {
             presence_penalty: 0,
             }),
             headers: {
-            Authorization: `Bearer ${import.meta.env.OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-            },
+                Authorization: `Bearer ${import.meta.env.OPENAI_API_KEY}`,
+                "Content-Type": "application/json",
+                },
             method: "POST",
         },
     );
