@@ -304,25 +304,7 @@
     {/each}
 </div>
 
-<div class="container" style="padding: 50px 0 100px 0">
-    {#if session}
-        <button on:click={() => goto("/")}>Back</button>
 
-        <div>
-            <input id="custom-file-input" type="file" autocomplete="off" accept="video/*"/>
-            <button on:click={uploadLocalVideo}>Upload</button>
-        </div>
-        <div>
-            <!-- <input
-                bind:value={youtubeURL}
-                type="text"
-                placeholder="Youtube link..."
-            /> -->
-            <button on:click={uploadYoutubeVideo}>Upload</button>
-            <p>{import.meta.env}</p>
-        </div>
-    {/if}
-</div>
 <!-- 
 <div id="no-videos">
     <p class="title is-1 no-videos">No Videos?</p>
