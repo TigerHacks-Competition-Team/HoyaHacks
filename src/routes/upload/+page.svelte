@@ -112,14 +112,14 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                    //'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({
                     video: publicURL,
                 })
             }).then(res => res.text());
             await updateNotesState(notesRowID, "Uploading to Transcription Engine")
-            await startTranscription(await createNote(youtubeURL), resJSON).catch(err =>
+            await startTranscription(notesRowID, resJSON).catch(err =>
                 console.log(err)
             );
             await updateNotesState(notesRowID, "Transcribing")
@@ -245,7 +245,7 @@
 </div>
 
 <div class="is-flex is-flex-direction-column" id="notes">
-    {#each notes as note}
+    {#each notes.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) as note}
         <Note
             {note}
             modalFunction={loadNoteModal}
