@@ -17,6 +17,8 @@
     let youtubeURL: string = "";
     let videoFileInput: HTMLInputElement;
 
+    $:sortedNotes = notes.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
     async function queryPrompt(prompt) {
         const response = await fetch(
             `https://api.openai.com/v1/completions`,
@@ -50,8 +52,12 @@
 
             listeningForStateChange(session.user.id, async (e) => {
                 let docIdx = notes.findIndex(ele => ele.id == e.new.id)
-                notes[docIdx] = e.new
+                console.log(docIdx)
+                if (docIdx < 0) notes.splice(0,0,e.new)
+                else notes[docIdx] = e.new
                 console.log(e);
+
+                notes = notes
 
                 if (e.new.state == 'Transcription Complete') {
                     console.log('doing gthe gpt3');
@@ -61,7 +67,7 @@
                     notes[docIdx] = updatedNote;
                     console.log('fininshed the gpt3');
                 }
-                     
+                notes = notes
             });
         });
 
@@ -133,6 +139,7 @@
 		const functionLink = 'http://35.232.31.28/yt2mp3';
 
         const notesRowID = await createNote(youtubeURL);
+        await updateNotesState(notesRowID, "Uploading and Converting Video")
 
         const resJSON = await fetch(functionLink, {
 			method: 'POST',
@@ -143,12 +150,14 @@
 			body: JSON.stringify({
                 url: youtubeURL,
 			})
-		  }).then((res) => res.text())
+		}).then((res) => res.text())
 
 
+        await updateNotesState(notesRowID, "Uploading to Transcription Engine")
         await startTranscription(notesRowID, resJSON).catch(err =>
             console.log(err)
         );
+        await updateNotesState(notesRowID, "Transcribing")
     }
 
     function formatDate(date: string) {
@@ -252,7 +261,7 @@
 </div>
 
 <div class="is-flex is-flex-direction-column" id="notes">
-    {#each notes.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) as note}
+    {#each sortedNotes as note}
         <Note
             {note}
             modalFunction={loadNoteModal}
