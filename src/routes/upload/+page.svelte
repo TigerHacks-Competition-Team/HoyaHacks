@@ -194,6 +194,7 @@
         const ytRegex = /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
         let matches = note.video_link?.match(ytRegex)
         selected.ytId = matches ? matches[1] : null;
+        console.log(selected);
     }
 
     function closeModal(e) {
@@ -220,7 +221,7 @@
 
             <h3 class="title is-3">{selected.title}</h3>
             <a class="link" href={selected.video_link}>Source: {selected.video_link}</a>
-            <p class="created">Created on {selected.created}</p>
+            <p class="created">Created on {selected.created_at}</p>
 
             <div class="buttons has-addons is-centered">
                 <button
