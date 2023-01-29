@@ -9,6 +9,7 @@
 
 	let session: AuthSession | null;
     let youtubeURL: string = ""
+	let videoFileInput: HTMLInputElement;
 
 	onMount(() => {
 		supabase.auth.getSession().then(({ data }) => {
@@ -37,6 +38,20 @@
         const notesRowID = await createNotes("bruh", "bruh")
 
         const resJson = await fetch('https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3', {
+	async function uploadLocalVideo() {
+		videoFileInput = <HTMLInputElement>document.getElementById("custom-file-input");
+		if (!videoFileInput.files) return;
+		
+		let file = videoFileInput.files[0];
+	}
+
+    async function uploadYoutubeVideo() {
+		const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
+        if (!youtubeURL.match(regex)) return;
+
+		const functionLink = 'https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3';
+
+        const resJson = await fetch(functionLink, {
 			method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,8 +71,8 @@
 		<button on:click={() => goto("/")}>Back</button>
         
         <div>
-            <input type="file" />
-            <button>Upload</button>
+            <input id="custom-file-input" type="file" autocomplete="off" accept="video/*"/>
+            <button on:click={uploadLocalVideo}>Upload</button>
         </div>
         <div>
             <input bind:value={youtubeURL} type="text" placeholder="Youtube link..." />
