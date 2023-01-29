@@ -112,14 +112,14 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                    //'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({
                     video: publicURL,
                 })
             }).then(res => res.text());
             await updateNotesState(notesRowID, "Uploading to Transcription Engine")
-            await startTranscription(await createNote(youtubeURL), resJSON).catch(err =>
+            await startTranscription(notesRowID, resJSON).catch(err =>
                 console.log(err)
             );
             await updateNotesState(notesRowID, "Transcribing")
@@ -172,7 +172,7 @@
         modalData.src = note.video_link;
         modalData.embedSrc = "https://www.youtube.com/embed/" + note.id;
         modalData.title = note.title || "Unknown Video";
-        modalData.created = formatDate(note.created_at);
+        modalData.created = note.created_at;
         modalData.data = note.notes || "summstury fheree";
         modalData.transcript = note.transcription || "transcriptifier";
 
@@ -205,18 +205,26 @@
             <div class="buttons has-addons is-centered">
                 <button
                 class="button summary-button is-primary is-selected"
-                on:click={() => {
+                on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
                         modalField.innerText = modalData.data;
+                        e.currentTarget.classList.add("is-primary");
+                        e.currentTarget.classList.add("is-selected");
+                        document.getElementsByClassName("transcript-button")[0].classList.remove("is-primary")
+                        document.getElementsByClassName("transcript-button")[0].classList.remove("is-selected")
                     }
                 }}>Summary</button>
                 <button
                 class="button transcript-button"
-                on:click={() => {
+                on:click={e => {
                     const modalField = document.getElementById("modal-field");
                     if (modalField) {
                         modalField.innerText = modalData.transcript;
+                        e.currentTarget.classList.add("is-primary");
+                        e.currentTarget.classList.add("is-selected");
+                        document.getElementsByClassName("summary-button")[0].classList.remove("is-primary")
+                        document.getElementsByClassName("summary-button")[0].classList.remove("is-selected")
                     }
                 }}>Transcript</button>
             </div>
@@ -246,7 +254,7 @@
 </div>
 
 <div class="is-flex is-flex-direction-column" id="notes">
-    {#each notes as note}
+    {#each notes.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) as note}
         <Note
             {note}
             modalFunction={loadNoteModal}
@@ -273,3 +281,8 @@
         </div>
     {/if}
 </div>
+<!-- 
+<div id="no-videos">
+    <p class="title is-1 no-videos">No Videos?</p>
+    <p class="subtitle.is-3 no-videos">Try pasting in a YouTube link above to start.</p>
+</div> -->
