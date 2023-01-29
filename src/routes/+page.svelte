@@ -2,12 +2,12 @@
     import { onMount } from "svelte";
     import { supabase } from "./supabase";
     import type { AuthSession } from "@supabase/supabase-js";
-    import Login from "./login.svelte";
     import Notes from "./notes.svelte";
     import { goto } from "$app/navigation";
     import "@fontsource/public-sans";
     import "@fortawesome/fontawesome-free/css/all.min.css";
     import "../style/landing.scss";
+    import { dataset_dev } from "svelte/internal";
 
     let session: AuthSession | null;
     let loaded: boolean = false;
@@ -15,6 +15,7 @@
     onMount(() => {
         supabase.auth.getSession().then(({ data }) => {
             session = data.session;
+            if (session) { goto("/upload") }
 
             loaded = true;
         });
@@ -29,16 +30,18 @@
             provider: "google",
         });
     }
+
 </script>
 
-<nav class="navbar not-scrolled">
+<nav class="navbar not-scrolled p-2">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
             <img src="logo.svg" alt="" />
+            <p class="title is-4 ml-3">AutoScribe</p>
         </a>
     </div>
     <div class="navbar-menu">
-        <div class="navbar-end">
+        <div class="navbar-end pr-2">
             <a href="#login" class="navbar-item icon-text">
                 <span class="icon">
                     <i class="fas fa-right-to-bracket" />
