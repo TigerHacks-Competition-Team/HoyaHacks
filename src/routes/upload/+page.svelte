@@ -4,7 +4,7 @@
     import type { AuthSession } from "@supabase/supabase-js";
     import { goto } from "$app/navigation";
     import { startTranscription } from "../../api/transcription";
-    import { queryPrompt } from "../../api/gpt";
+    //import { queryPrompt } from "../../api/gpt";
     import "@fontsource/public-sans";
     import "@fortawesome/fontawesome-free/css/all.min.css";
     import "../../style/upload.scss";
@@ -52,18 +52,6 @@
         return;
     }
 
-    async function uploadYoutubeVideo(url: string) {
-        if (
-            !url.match(/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g)
-        )
-            return;
-
-        const notesRowID = await createNote(url);
-
-        const resJson = await fetch(
-            "https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3",
-            {
-                method: "POST",
 	async function uploadLocalVideo() {
 		videoFileInput = <HTMLInputElement>document.getElementById("custom-file-input");
 		if (!videoFileInput.files) return;
@@ -82,34 +70,29 @@
                     'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({
-                    url: url,
-                }),
-            }
-        ).then(res => res.json());
-                    video: publicURL
+                    video: publicURL,
                 })
-            }).then((res) => res.json)
-        })
+            })
+        }).then(res => res.json());
 	}
 
     async function uploadYoutubeVideo() {
-		  const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
-      if (!youtubeURL.match(regex)) return;
+		const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
+        if (!youtubeURL.match(regex)) return;
 
-		  const functionLink = 'http://35.232.31.28/yt2mp3';
+		const functionLink = 'http://35.232.31.28/yt2mp3';
 
+        const notesRowID = await createNote(youtubeURL);
 
-      const notesRowID = await createNotes("bruh", "bruh");
-
-      const resJson = await fetch(functionLink, {
-			  method: 'POST',
+        const resJson = await fetch(functionLink, {
+			method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 //'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
             },
-			  body: JSON.stringify({
+			body: JSON.stringify({
                 url: youtubeURL,
-			  })
+			})
 		  }).then((res) => res.json())
 
 

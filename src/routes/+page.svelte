@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import { supabase } from "./supabase";
     import type { AuthSession } from "@supabase/supabase-js";
-    import Notes from "./notes.svelte";
     import { goto } from "$app/navigation";
     import "@fontsource/public-sans";
     import "@fortawesome/fontawesome-free/css/all.min.css";
