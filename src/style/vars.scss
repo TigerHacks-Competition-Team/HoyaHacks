@@ -7,11 +7,23 @@ $bg1: #2b2b2b;
 // OVERRIDE VARIABLES
 $primary: #71dbf2;
 $link: lighten($primary, 15);
+$link-hover: saturate($primary, 10);
 
 $scheme-main: #2b2b2b;
 $scheme-main-ter: #222222;
 $scheme-main-bis: #1E1E1E;
 $text: #fff;
+$text-strong: #fff;
+
+$radius: 10px;
+
+// button
+$button-background-color: #454545;
+$button-border-color: #575757;
+$button-hover-color: $link;
+$button-hover-border-color: lighten($button-border-color, 15);
+
+$subtitle-color: #BFBFBF;
 
 $family-sans-serif: "Public Sans", "Fira Sans", "Ubuntu",
     defaults.$family-sans-serif;

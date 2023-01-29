@@ -1,5 +1,10 @@
+@use "bulma/bulma.sass" as defaults;
 @import "vars.scss";
 @import "global.scss";
+
+body {
+    overflow-x: hidden;
+}
 
 .navbar {
     // transparent before scrolled
@@ -13,6 +18,163 @@
 
     .icon {
         color: $primary;
-    }    
+    }
 }
+
+$section-padding: 3rem;
+
+.section {
+    @include defaults.from(defaults.$desktop) {
+        height: calc(100vh);
+    }
+
+    * {
+        // so no elements go behind the ::before
+        z-index: 2;
+    }
+}
+
+#section-1 {
+    @include defaults.from(defaults.$desktop) {
+        padding-right: 0 !important;
+    }
+    @include defaults.until(defaults.$desktop) {
+        padding-left: 1.5rem;
+        padding-right: 0;
+
+        .info-text {
+            padding-right: 1.5rem;
+        }
+    }
+}
+
+.emphasis {
+    color: $primary;
+    text-decoration: underline;
+}
+
+.info-text {
+    margin: auto;
+    max-width: 30rem;
+
+    @include defaults.from(defaults.$desktop) {
+        padding-top: 20%;
+    }
+
+    .button {
+        margin-right: 0.5rem;
+    }
+}
+
+.art {
+    &.is-first {
+        transform: translateY(-20%);
+
+        @include defaults.until(defaults.$desktop) {
+            transform: none;
+            padding: 5rem 0;
+            max-width: 120vw;
+            max-height: 100vh;
+        }
+    }
+    &.is-second {
+        @include defaults.from(defaults.$desktop) {
+            transform: translateY(-3vh);
+        }
+    }
+}
+
+#section-2 {
+    position: relative;
+    z-index: 1;
+
+    @include defaults.from(defaults.$desktop) {
+        padding-left: 0 !important;
+    }
+    @include defaults.until(defaults.$desktop) {
+        padding-left: 0;
+        padding-right: 1.5rem;
+        .info-text {
+            padding-left: 1.5rem;
+        }
+    }
+
+    .info-text {
+        @include defaults.from(defaults.$desktop) {
+            padding-top: 25%;
+        }
+    }
+
+    &::before {
+        position: absolute;
+        width: 200vw;
+        height: 110%;
+        transform: translateX(-50vw) rotate(-5deg);
+        top: 0;
+        left: 0;
+        content: "";
+        z-index: -1;
+
+        background-color: #262626;
+    }
+}
+
+#section-3 {
+    margin-top: 10vh;
+    position: relative;
+    min-height: 100vh;
+}
+
+#login-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .divider {
+        margin: 0.5em 0;
+        position: relative;
+        color: #999999;
+
+        &::before, &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 90%;
+            height: 5px;
+
+            z-index: -1;
+        }
+        &::before {
+            left: -95%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                #404040,
+            );
+        }
+        &::after {
+            left: 105%;
+            background: linear-gradient(
+                to left,
+                transparent,
+                #404040,
+            );
+        }
+    }
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 @import "bulma/bulma.sass";

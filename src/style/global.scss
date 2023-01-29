@@ -12,3 +12,19 @@ body {
 html {
     scroll-behavior: smooth;
 }
+
+.fake-icon {
+    margin-right: 0.5em !important;
+
+    img {
+        width: 75%;
+    }
+}
+
+.button.is-primary {
+    color: rgba(42, 42, 42, 95);
+
+    &:hover {
+        background-color: $link !important;
+    }
+}
