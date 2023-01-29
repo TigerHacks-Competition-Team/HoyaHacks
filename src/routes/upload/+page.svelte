@@ -1,10 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { supabase } from "../supabase";
+    import { supabase, uploadVideoToDB } from "../supabase";
     import type { AuthSession } from "@supabase/supabase-js";
     import { goto } from "$app/navigation";
     import { startTranscription } from "../../api/transcription";
-    //import { queryPrompt } from "../../api/gpt";
     import "@fontsource/public-sans";
     import "@fortawesome/fontawesome-free/css/all.min.css";
     import "../../style/upload.scss";
@@ -72,19 +71,23 @@
                 body: JSON.stringify({
                     video: publicURL,
                 })
-            })
-        }).then(res => res.json());
+            }).then(res => res.json());
+            await startTranscription(await createNote(youtubeURL), resJSON.url).catch(err =>
+                console.log(err)
+            );
+        });
+
 	}
 
     async function uploadYoutubeVideo() {
-		const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
+		const regex = /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/g;
         if (!youtubeURL.match(regex)) return;
 
 		const functionLink = 'http://35.232.31.28/yt2mp3';
 
         const notesRowID = await createNote(youtubeURL);
 
-        const resJson = await fetch(functionLink, {
+        const resJSON = await fetch(functionLink, {
 			method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +99,7 @@
 		  }).then((res) => res.json())
 
 
-        await startTranscription(notesRowID, resJson.url).catch(err =>
+        await startTranscription(notesRowID, resJSON.url).catch(err =>
             console.log(err)
         );
     }
