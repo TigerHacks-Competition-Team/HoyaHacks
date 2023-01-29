@@ -30,7 +30,7 @@
     }
 </script>
 
-<Navbar {session}/>
+<Navbar {session} />
 
 <div class="section" id="section-1">
     <div class="columns is-desktop">
@@ -61,13 +61,13 @@
         <div class="column">
             <div class="info-text">
                 <h1 class="title is-1">
-                    Something <span class="emphasis">Easier.</span>
+                    Make Learning <span class="emphasis">Easier.</span>
                 </h1>
                 <h3 class="subtitle is-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    With AutoScribe, learning becomes a breeze. Gone are the
+                    days of going back over material you already know, just to
+                    find the one thing you don't. Now, you can find it in
+                    seconds.
                 </h3>
             </div>
         </div>
