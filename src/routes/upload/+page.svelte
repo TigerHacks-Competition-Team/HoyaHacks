@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { supabase, uploadVideoToDB } from "../supabase";
+    import { supabase, updateNotesState, uploadVideoToDB } from "../supabase";
     import type { AuthSession } from "@supabase/supabase-js";
     import { goto } from "$app/navigation";
     import { startTranscription } from "../../api/transcription";
@@ -52,6 +52,8 @@
     }
 
 	async function uploadLocalVideo() {
+        const notesRowID = await createNote(youtubeURL);
+        await updateNotesState(notesRowID, "Uploading and Converting Video")
 		videoFileInput = <HTMLInputElement>document.getElementById("custom-file-input");
 		if (!videoFileInput.files) return;
 		
@@ -72,9 +74,11 @@
                     video: publicURL,
                 })
             }).then(res => res.json());
+            await updateNotesState(notesRowID, "Uploading to Transcription Engine")
             await startTranscription(await createNote(youtubeURL), resJSON.url).catch(err =>
                 console.log(err)
             );
+            await updateNotesState(notesRowID, "Transcribing")
         });
 
 	}

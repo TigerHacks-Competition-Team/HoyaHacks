@@ -22,3 +22,5 @@ export async function uploadVideoToDB(file) {
                 .from('custom-videos')
                 .getPublicUrl(`videos/${file.name}`);
 }
+
+export const listingForStateChange = (id) => supabase.from("notes")
