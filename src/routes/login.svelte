@@ -8,8 +8,6 @@
     }
 </script>
 
-<div>
-    <h1>Supabase + Svelte</h1>
+<h1>Supabase + Svelte</h1>
 
-    <button on:click={signInWithGoogle}>Sign in with google</button>
-</div>
+<button on:click={signInWithGoogle}>Sign in with google</button>

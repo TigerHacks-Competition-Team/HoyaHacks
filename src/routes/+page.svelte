@@ -23,12 +23,10 @@
 	});
 </script>
 
-<div>
-	{#if session}
-		<button on:click={() => goto("/account")}>Account</button>
-		<button on:click={() => goto("/upload")}>Upload</button>
-		<Notes {session} />
-	{:else if loaded}
-		<Login />
-	{/if}
-</div>
+{#if session}
+	<button on:click={() => goto("/account")}>Account</button>
+	<button on:click={() => goto("/upload")}>Upload</button>
+	<Notes {session} />
+{:else if loaded}
+	<Login />
+{/if}
