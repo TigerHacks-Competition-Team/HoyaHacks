@@ -6,6 +6,7 @@
     import Notes from "./notes.svelte";
     import { goto } from "$app/navigation";
     import "@fontsource/public-sans";
+    import "@fortawesome/fontawesome-free/css/all.css";
     import "../style/landing.scss";
 
     let session: AuthSession | null;
@@ -24,10 +25,20 @@
     });
 </script>
 
-<nav class="navbar">
+<nav class="navbar not-scrolled">
     <div class="navbar-brand">
-        <div class="navbar-item">
-            <button class="button is-primary" />
+        <a class="navbar-item" href="/">
+            <img src="logo.svg" alt="" />
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <a href="#login" class="navbar-item icon-text">
+                <span class="icon">
+                    <i class="fas fa-right-to-bracket" />
+                </span>
+                <span>Log In</span>
+            </a>
         </div>
     </div>
 </nav>
