@@ -99,6 +99,10 @@
             .created, .preview {
                 color: #909090;
             }
+            .status[data-loading="true"] {
+                color: $primary;
+                font-weight: bold;
+            }
         }
 
         cursor: pointer;
