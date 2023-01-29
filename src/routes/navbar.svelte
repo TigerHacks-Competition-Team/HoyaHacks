@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { page } from "$app/stores";
     import type { Session } from "@supabase/supabase-js";
     import { onMount } from "svelte";
 
@@ -36,7 +37,7 @@
                     </span>
                     <span>Log In</span>
                 </a>
-            {:else}
+            {:else if ($page.route.id != "/upload")}
                 <a href="/upload" class="navbar-item icon-text">
                     <span class="icon">
                         <i class="fas fa-book-reader" />

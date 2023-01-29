@@ -7,15 +7,17 @@
     import { queryPrompt } from "../../api/gpt";
     import "@fontsource/public-sans";
     import "@fortawesome/fontawesome-free/css/all.min.css";
-    import "../../style/landing.scss";
+    import "../../style/upload.scss";
     import Navbar from "../navbar.svelte";
+    import Note from "../note.svelte";
 
     let session: AuthSession | null;
-    let youtubeURL: string = "";
+    let notes: ArrayLike<any> = [];
 
     onMount(() => {
         supabase.auth.getSession().then(({ data }) => {
             session = data.session;
+            getNotes();
         });
 
         supabase.auth.onAuthStateChange((_event, _session) => {
@@ -23,10 +25,24 @@
         });
     });
 
-    async function createNotes(notes: string, link: string) {
+    async function getNotes() {
+        console.log("getNotes called", session);
+        if (!session) return null;
+        let { data, error } = await supabase
+            .from("notes")
+            .select()
+            .eq("user", session.user.id);
+
+        console.log(data);
+        if (data) {
+            notes = data;
+        }
+    }
+
+    async function createNote(link: string) {
         const { data } = await supabase
             .from("notes")
-            .insert({ user: session?.user.id, notes: notes, video_link: link })
+            .insert({ user: session?.user.id, video_link: link })
             .select("id");
 
         if (data) return data[0].id;
@@ -34,15 +50,13 @@
         return;
     }
 
-    async function uploadYoutubeVideo() {
+    async function uploadYoutubeVideo(url: string) {
         if (
-            !youtubeURL.match(
-                /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g
-            )
+            !url.match(/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g)
         )
             return;
 
-        const notesRowID = await createNotes("bruh", "bruh");
+        const notesRowID = await createNote(url);
 
         const resJson = await fetch(
             "https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3",
@@ -55,7 +69,7 @@
                     }`,
                 },
                 body: JSON.stringify({
-                    url: youtubeURL,
+                    url: url,
                 }),
             }
         ).then(res => res.json());
@@ -68,7 +82,17 @@
 
 <Navbar {session} />
 
-<div class="container" style="padding: 50px 0 100px 0">
+{#each notes as note}
+    <Note
+        name="Temp Note Name"
+        link={note.video_link}
+        data={note.notes}
+        created={note.created_at}
+        transcription={note.transcription}
+    />
+{/each}
+
+<!-- <div class="container" style="padding: 50px 0 100px 0">
     {#if session}
         <button on:click={() => goto("/")}>Back</button>
 
@@ -86,4 +110,4 @@
             <p>{import.meta.env}</p>
         </div>
     {/if}
-</div>
+</div> -->

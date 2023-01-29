@@ -2,7 +2,10 @@
 @import "vars.scss";
 @import "global.scss";
 
-
+#navbar {
+    background-color: $scheme-main !important;
+    box-shadow: 0 2px 20px 3px $scheme-main;
+}
 
 
 @import "bulma/bulma.sass";
