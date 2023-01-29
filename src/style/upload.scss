@@ -129,4 +129,36 @@
     }
 }
 
+.note {
+    overflow: hidden;
+    position: relative !important;
+}
+.note-info {
+}
+.note .loading {
+    height: 1rem;
+    width: 200%;
+    // background-color: $primary;
+    background: repeating-linear-gradient(
+        -45deg,
+        $primary,
+        $primary 10px,
+        darken($primary, 15) 10px,
+        darken($primary, 15) 20px
+    );
+    animation: load 3s 1s linear infinite;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+
+@keyframes load {
+    from {
+        background-position: -102%;
+    }
+    to {
+        background-position: 0;
+    }
+}
+
 @import "bulma/bulma.sass";
