@@ -43,14 +43,17 @@
         );
 
         const responseJson = await response.json()
-        return responseJson.choices[0].text
+        if (responseJson.choices >= 0)
+            return responseJson.choices[0].text
+        return ""
     }
 
     onMount(() => {
-        supabase.auth.getSession().then(({ data }) => {
+        supabase.auth.getSession().then(async ({ data }) => {
             session = data.session;
             if (!session) return;
             getNotes();
+            
 
             listeningForStateChange(session.user.id, async (e) => {
                 let docIdx = notes.findIndex(ele => ele.id == e.new.id)
@@ -60,17 +63,9 @@
                 console.log(e);
 
                 notes = notes
+                await generateNotes(e.new)
 
-                if (e.new.state == 'Transcription Complete') {
-                    console.log('doing gthe gpt3');
-                    await updateNotesState(e.new.id, 'Generating Notes');
-                    let note = await queryPrompt(`Prompt: summarize the following using bullet points with section titles: ${e.new.transcription}\nAnswer:`);
-                    let title = await queryPrompt(`Prompt: create a title based on this text: ${note}\nAnswer:`)
-                    let updatedNote = await updateNote({id: e.new.id, notes: note, state: 'Complete', title: title});
-                    notes[docIdx] = updatedNote;
-                    console.log('fininshed the gpt3');
-                }
-                notes = notes
+                
             });
         });
 
@@ -78,6 +73,24 @@
             session = _session;
         });
     });
+
+    async function generateNotes(note) {
+        console.log("generating notes")
+        let docIdx = notes.findIndex(ele => ele.id == note.id)
+        console.log(JSON.stringify(note))
+        if (note.state == 'Transcription Complete' || (note.notes == null && note.transcription != null)) {
+            console.log('doing gthe gpt3');
+
+            await updateNotesState(note.id, 'Generating Notes');
+            let summary = await queryPrompt(`Prompt: summarize the following using bullet points with section titles: ${note.transcription}\nAnswer:`);
+            let title = await queryPrompt(`Prompt: create a title based on this text: ${note}\nAnswer:`)
+            let updatedNote = await updateNote({id: note.id, notes: summary, state: 'Complete', title: title});
+            notes[docIdx] = updatedNote;
+            console.log('fininshed the gpt3');
+            notes = notes
+        }
+        return
+    }
 
     async function getNotes() {
         if (!session) return null;
@@ -89,6 +102,8 @@
         //console.log(data);
         if (data) {
             notes = data;
+            let promises = notes.map((note) => generateNotes(note))
+            await Promise.all(promises)
         }
     }
 
