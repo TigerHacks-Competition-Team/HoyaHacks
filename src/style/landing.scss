@@ -1,0 +1,18 @@
+@import "vars.scss";
+@import "global.scss";
+
+.navbar {
+    // transparent before scrolled
+    &.not-scrolled {
+        background-color: transparent;
+
+        .navbar-item {
+            background-color: transparent !important;
+        }
+    }
+
+    .icon {
+        color: $primary;
+    }    
+}
+@import "bulma/bulma.sass";
