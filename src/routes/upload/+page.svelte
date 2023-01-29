@@ -146,6 +146,7 @@
 			})
 		  }).then((res) => res.text())
 
+        youtubeURL = "";
 
         await startTranscription(notesRowID, resJSON).catch(err =>
             console.log(err)
@@ -249,7 +250,13 @@
             </span>
             <span>Upload Video</span>
         </button>
-        <input class="input pl-4" type="text" placeholder="Paste your YouTube URL">
+        <input class="input pl-4" type="text" id="url-input" placeholder="Paste your YouTube URL" on:paste={uploadYoutubeVideo} bind:value={youtubeURL}>
+        <button class="button is-primary" on:click={uploadYoutubeVideo}>
+            <span class="icon">
+                <i class="fas fa-paper-plane" />
+            </span>
+            <span>Send URL</span>
+        </button>
     </div>
 </div>
 
@@ -271,11 +278,11 @@
             <button on:click={uploadLocalVideo}>Upload</button>
         </div>
         <div>
-            <input
+            <!-- <input
                 bind:value={youtubeURL}
                 type="text"
                 placeholder="Youtube link..."
-            />
+            /> -->
             <button on:click={uploadYoutubeVideo}>Upload</button>
             <p>{import.meta.env}</p>
         </div>

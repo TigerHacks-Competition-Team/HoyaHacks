@@ -45,8 +45,14 @@
         }
 
         .button {
-            border-bottom-right-radius: 0;
-            border-top-right-radius: 0;
+            &:first-child {
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+            &:last-child {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
             height: calc(defaults.$navbar-height - 0.5rem);
         }
 
@@ -56,7 +62,7 @@
             box-shadow: none;
             background-color: transparent;
             // box-sizing: border-box;
-            border-bottom-left-radius: 0;
+            border-radius: 0;
 
             &:active,
             &:focus,
