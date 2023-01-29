@@ -16,10 +16,6 @@
     onMount(() => {
         supabase.auth.getSession().then(({ data }) => {
             session = data.session;
-            // if (session) {
-            //     goto("/upload");
-            // }
-
             loaded = true;
         });
 
@@ -35,24 +31,6 @@
     }
 </script>
 
-<!-- <nav class="navbar not-scrolled p-2">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src="logo.svg" alt="" />
-            <p class="title is-4 ml-3">AutoScribe</p>
-        </a>
-    </div>
-    <div class="navbar-menu">
-        <div class="navbar-end pr-2">
-            <a href="#login" class="navbar-item icon-text">
-                <span class="icon">
-                    <i class="fas fa-right-to-bracket" />
-                </span>
-                <span>Log In</span>
-            </a>
-        </div>
-    </div>
-</nav> -->
 <Navbar {session}/>
 
 <div class="section" id="section-1">

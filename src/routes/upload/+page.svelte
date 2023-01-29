@@ -5,8 +5,10 @@
     import { goto } from "$app/navigation";
     import { startTranscription } from "../../api/transcription";
     import { queryPrompt } from "../../api/gpt";
+    import "@fontsource/public-sans";
+    import "@fortawesome/fontawesome-free/css/all.min.css";
+    import "../../style/landing.scss";
     import Navbar from "../navbar.svelte";
-    console.log(import.meta.env);
 
     let session: AuthSession | null;
     let youtubeURL: string = "";
