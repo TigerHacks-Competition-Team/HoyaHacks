@@ -171,7 +171,7 @@
         modalData.src = note.video_link;
         modalData.embedSrc = "https://www.youtube.com/embed/" + note.id;
         modalData.title = note.title || "Unknown Video";
-        modalData.created = formatDate(note.created_at);
+        modalData.created = note.created_at;
         modalData.data = note.notes || "summstury fheree";
         modalData.transcript = note.transcription || "transcriptifier";
 
@@ -279,3 +279,8 @@
         </div>
     {/if}
 </div>
+<!-- 
+<div id="no-videos">
+    <p class="title is-1 no-videos">No Videos?</p>
+    <p class="subtitle.is-3 no-videos">Try pasting in a YouTube link above to start.</p>
+</div> -->
