@@ -4,8 +4,9 @@
  * @param {String} url uri of the converted mp3 in cloud storage
  * @returns 
  */
-const startTranscription = async (id, url) => 
-    fetch(
+export const startTranscription = async (id, url) => {
+    console.log(import.meta.env.GCP_API_KEY)
+    let response = await fetch(
         `https://speech.googleapis.com/v1p1beta1/speech:longrunningrecognize`,
         {
             body: JSON.stringify({
@@ -21,9 +22,13 @@ const startTranscription = async (id, url) =>
                 },
             }),
             headers: {
-                Authorization: `Bearer ${import.meta.env.GCP_API_KEY}`,
+                Authorization: `Bearer ${import.meta.env.VITE_GCP_KEY}`,
                 "Content-Type": "application/json",
             },
             method: "POST",
         },
-    )
+    ).then(response => response.json()).catch(err => console.warn(err))
+    console.log(response)
+    return response
+}
+    

@@ -3,6 +3,9 @@
 	import { supabase } from "../supabase";
 	import type { AuthSession } from "@supabase/supabase-js";
 	import { goto } from "$app/navigation";
+    import { startTranscription } from '../../api/transcription';
+    import { queryPrompt } from '../../api/gpt';
+    console.log(import.meta.env)
 
 	let session: AuthSession | null;
     let youtubeURL: string = ""
@@ -23,7 +26,9 @@
             .insert({user: session?.user.id, notes: notes, video_link: link})
             .select('id')
 
-        return data[0].id
+        if (data) return data[0].id
+
+        return
     }
 
     async function uploadYoutubeVideo() {
@@ -42,7 +47,7 @@
 			})
 		}).then((res) => res.json())
 
-        
+        await startTranscription(notesRowID, resJson.url).catch(err => console.log(err))
     }
 </script>
 
@@ -57,6 +62,7 @@
         <div>
             <input bind:value={youtubeURL} type="text" placeholder="Youtube link..." />
             <button on:click={uploadYoutubeVideo}>Upload</button>
+            <p>{import.meta.env}</p>
         </div>
 	{/if}
 </div>
