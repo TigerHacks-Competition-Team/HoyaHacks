@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { supabase } from "../supabase";
+	import { supabase, uploadVideoToDB } from "../supabase";
 	import type { AuthSession } from "@supabase/supabase-js";
 	import { goto } from "$app/navigation";
     import { startTranscription } from '../../api/transcription';
     import { queryPrompt } from '../../api/gpt';
-    console.log(import.meta.env)
+    // console.log(import.meta.env)
 
 	let session: AuthSession | null;
     let youtubeURL: string = ""
@@ -32,30 +32,43 @@
         return
     }
 
-    async function uploadYoutubeVideo() {
-        if (!youtubeURL.match(/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g)) return
-
-        const notesRowID = await createNotes("bruh", "bruh")
-
-        const resJson = await fetch('https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3', {
 	async function uploadLocalVideo() {
 		videoFileInput = <HTMLInputElement>document.getElementById("custom-file-input");
 		if (!videoFileInput.files) return;
 		
 		let file = videoFileInput.files[0];
+        
+        await uploadVideoToDB(file).then(async (data) => {
+            let publicURL = data.data.publicUrl;
+
+            const functionLink = "http://35.232.31.28/video2mp3";
+
+            const resJSON = await fetch(functionLink, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                },
+                body: JSON.stringify({
+                    video: publicURL
+                })
+            }).then((res) => res.json)
+        })
 	}
 
     async function uploadYoutubeVideo() {
 		const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
         if (!youtubeURL.match(regex)) return;
 
-		const functionLink = 'https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3';
+		const functionLink = 'http://35.232.31.28/yt2mp3';
+
+        const notesRowID = await createNotes("bruh", "bruh")
 
         const resJson = await fetch(functionLink, {
 			method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+                //'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
             },
 			body: JSON.stringify({
                 url: youtubeURL,
