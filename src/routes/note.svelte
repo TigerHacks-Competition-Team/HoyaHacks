@@ -30,6 +30,7 @@
         <p class="title is-5">{note.title || "Unknown Video"}</p>
         <a href="{note.video_link}">Source: {note.video_link}</a>
         <p class="created">Created on {date}</p>
+        <p class="created">{note.state}</p>
         {#if loading}
             <progress class="progress" value="100" max="100">Loading...</progress>
         {:else}
