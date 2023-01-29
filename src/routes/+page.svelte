@@ -8,6 +8,7 @@
     import "@fortawesome/fontawesome-free/css/all.min.css";
     import "../style/landing.scss";
     import { dataset_dev } from "svelte/internal";
+    import Navbar from "./navbar.svelte";
 
     let session: AuthSession | null;
     let loaded: boolean = false;
@@ -15,7 +16,9 @@
     onMount(() => {
         supabase.auth.getSession().then(({ data }) => {
             session = data.session;
-            if (session) { goto("/upload") }
+            // if (session) {
+            //     goto("/upload");
+            // }
 
             loaded = true;
         });
@@ -30,10 +33,9 @@
             provider: "google",
         });
     }
-
 </script>
 
-<nav class="navbar not-scrolled p-2">
+<!-- <nav class="navbar not-scrolled p-2">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
             <img src="logo.svg" alt="" />
@@ -50,7 +52,8 @@
             </a>
         </div>
     </div>
-</nav>
+</nav> -->
+<Navbar {session}/>
 
 <div class="section" id="section-1">
     <div class="columns is-desktop">
@@ -97,7 +100,7 @@
     </div>
 </div>
 
-<div class="section" id="section-3">
+<section class="section" id="login">
     <div id="login-form">
         <h1 class="title is-1">Get Started</h1>
         <button class="button is-large" on:click={signInWithGoogle}>
@@ -132,4 +135,4 @@
             </p>
         </div>
     </div>
-</div>
+</section>

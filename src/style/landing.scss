@@ -7,6 +7,11 @@ body {
 }
 
 .navbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+
     // transparent before scrolled
     &.not-scrolled {
         background-color: transparent;
@@ -15,6 +20,8 @@ body {
             background-color: transparent !important;
         }
     }
+
+    transition: background-color 0.1s;
 
     .icon {
         color: $primary;
@@ -119,7 +126,7 @@ $section-padding: 3rem;
     }
 }
 
-#section-3 {
+#login {
     margin-top: 10vh;
     position: relative;
     min-height: 100vh;
@@ -140,7 +147,8 @@ $section-padding: 3rem;
         position: relative;
         color: #999999;
 
-        &::before, &::after {
+        &::before,
+        &::after {
             content: "";
             position: absolute;
             top: 50%;
@@ -153,19 +161,11 @@ $section-padding: 3rem;
         }
         &::before {
             left: -95%;
-            background: linear-gradient(
-                to right,
-                transparent,
-                #404040,
-            );
+            background: linear-gradient(to right, transparent, #404040);
         }
         &::after {
             left: 105%;
-            background: linear-gradient(
-                to left,
-                transparent,
-                #404040,
-            );
+            background: linear-gradient(to left, transparent, #404040);
         }
     }
 }
