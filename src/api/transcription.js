@@ -5,7 +5,6 @@
  * @returns 
  */
 export const startTranscription = async (id, url) => {
-    console.log(import.meta.env.GCP_API_KEY)
     console.log("Transcribing: ",url)
     let response = await fetch(
         `https://speech.googleapis.com/v1p1beta1/speech:longrunningrecognize`,
