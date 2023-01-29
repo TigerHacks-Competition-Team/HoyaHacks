@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { queryPrompt } from './../../api/gpt.js';
     import { onMount } from "svelte";
     import { supabase, uploadVideoToDB } from "../supabase";
     import type { AuthSession } from "@supabase/supabase-js";
@@ -27,7 +28,6 @@
     });
 
     async function getNotes() {
-        console.log("getNotes called", session);
         if (!session) return null;
         let { data, error } = await supabase
             .from("notes")
@@ -103,19 +103,107 @@
             console.log(err)
         );
     }
+
+    function formatDate(date: string) {
+        let dateObj = new Date(date);
+        return dateObj.toLocaleDateString() + " at " + dateObj.toLocaleTimeString();
+    }
+
+    const modalData = {
+        src: "",
+        srcText: "",
+        title: "",
+        created: "",
+        data: "",
+        transcript: "",
+    }
+
+    function loadNoteModal(note: Object) {
+        console.log(note);
+        // load data into object / page
+        modalData.src = note.video_link;
+        modalData.embedSrc = "https://www.youtube.com/embed/" + note.id;
+        modalData.title = note.title || "Unknown Video";
+        modalData.created = formatDate(note.created_at);
+        modalData.data = note.notes || "summstury fheree";
+        modalData.transcript = note.transcription || "transcriptifier";
+
+        const modal = document.getElementById("note-modal");
+        modal?.classList.add("is-active");
+    }
+    function closeModal(e) {
+        const modal = document.getElementById("note-modal");
+        if (e.key) {
+             if (e.key == "Escape") {
+                modal?.classList.remove("is-active");
+             }
+        } else {
+            modal?.classList.remove("is-active");
+        }
+    }
 </script>
 
-<Navbar {session} />
+<div class="modal" id="note-modal">
+    <div class="modal-background" on:click={closeModal} on:keydown={closeModal}></div>
+    <div class="modal-content">
+        <div class="card">
+            <iframe src={modalData.embedSrc} frameborder="0" title={modalData.title}></iframe>
 
-{#each notes as note}
-    <Note
-        name="Temp Note Name"
-        link={note.video_link}
-        data={note.notes}
-        created={note.created_at}
-        transcription={note.transcription}
-    />
-{/each}
+            <h3 class="title is-3">{modalData.title}</h3>
+            <a class="link" href={modalData.src}>Source: {modalData.src}</a>
+            <p class="created">Created on {modalData.created}</p>
+
+            <div class="buttons has-addons is-centered">
+                <button
+                class="button summary-button is-primary is-selected"
+                on:click={() => {
+                    const modalField = document.getElementById("modal-field");
+                    if (modalField) {
+                        modalField.innerText = modalData.data;
+                    }
+                }}>Summary</button>
+                <button
+                class="button transcript-button"
+                on:click={() => {
+                    const modalField = document.getElementById("modal-field");
+                    if (modalField) {
+                        modalField.innerText = modalData.transcript;
+                    }
+                }}>Transcript</button>
+            </div>
+    
+            <p id="modal-field">{modalData.data}</p>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" on:click={closeModal}></button>
+</div>
+
+<div id="video-bar" class="level">
+    <div class="level-left mx-2">
+        <a class="level-item" href="/">
+            <img src="logo.svg" alt=""/>
+            <p class="title is-4 ml-3">AutoScribe</p>
+        </a>
+    </div>
+    <div class="level-right mr-2" id="video-inputs">
+        <button class="button is-primary">
+            <span class="icon">
+                <i class="fas fa-upload"></i>
+            </span>
+            <span>Upload Video</span>
+        </button>
+        <input class="input pl-4" type="text" placeholder="Paste your YouTube URL">
+    </div>
+</div>
+
+<div class="is-flex is-flex-direction-column" id="notes">
+    {#each notes as note}
+        <Note
+            {note}
+            modalFunction={loadNoteModal}
+        />
+    {/each}
+</div>
 
 <!-- <div class="container" style="padding: 50px 0 100px 0">
     {#if session}
