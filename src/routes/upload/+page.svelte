@@ -57,7 +57,8 @@
                     console.log('doing gthe gpt3');
                     await updateNotesState(e.new.id, 'Generating Notes');
                     let note = await queryPrompt(`Prompt: summarize the following using bullet points with section titles: ${e.new.transcription}\nAnswer:`);
-                    let updatedNote = await updateNote({id: e.new.id, notes: note, state: 'Complete'});
+                    let title = await queryPrompt(`Prompt: create a title based on this text: ${note}\nAnswer:`)
+                    let updatedNote = await updateNote({id: e.new.id, notes: note, state: 'Complete', title: title});
                     notes[docIdx] = updatedNote;
                     console.log('fininshed the gpt3');
                 }
@@ -178,6 +179,7 @@
         const modal = document.getElementById("note-modal");
         modal?.classList.add("is-active");
     }
+
     function closeModal(e) {
         const modal = document.getElementById("note-modal");
         if (e.key) {
