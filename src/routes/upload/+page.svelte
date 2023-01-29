@@ -13,6 +13,8 @@
 
     let session: AuthSession | null;
     let notes: ArrayLike<any> = [];
+    let youtubeURL: string = "";
+    let videoFileInput: HTMLInputElement;
 
     onMount(() => {
         supabase.auth.getSession().then(({ data }) => {
@@ -62,17 +64,54 @@
             "https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3",
             {
                 method: "POST",
+	async function uploadLocalVideo() {
+		videoFileInput = <HTMLInputElement>document.getElementById("custom-file-input");
+		if (!videoFileInput.files) return;
+		
+		let file = videoFileInput.files[0];
+        
+        await uploadVideoToDB(file).then(async (data) => {
+            let publicURL = data.data.publicUrl;
+
+            const functionLink = "http://35.232.31.28/video2mp3";
+
+            const resJSON = await fetch(functionLink, {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${
-                        import.meta.env.VITE_SUPABASE_ANON_KEY
-                    }`,
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
                 },
                 body: JSON.stringify({
                     url: url,
                 }),
             }
         ).then(res => res.json());
+                    video: publicURL
+                })
+            }).then((res) => res.json)
+        })
+	}
+
+    async function uploadYoutubeVideo() {
+		  const regex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g;
+      if (!youtubeURL.match(regex)) return;
+
+		  const functionLink = 'http://35.232.31.28/yt2mp3';
+
+
+      const notesRowID = await createNotes("bruh", "bruh");
+
+      const resJson = await fetch(functionLink, {
+			  method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                //'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+            },
+			  body: JSON.stringify({
+                url: youtubeURL,
+			  })
+		  }).then((res) => res.json())
+
 
         await startTranscription(notesRowID, resJson.url).catch(err =>
             console.log(err)
@@ -97,8 +136,8 @@
         <button on:click={() => goto("/")}>Back</button>
 
         <div>
-            <input type="file" />
-            <button>Upload</button>
+            <input id="custom-file-input" type="file" autocomplete="off" accept="video/*"/>
+            <button on:click={uploadLocalVideo}>Upload</button>
         </div>
         <div>
             <input

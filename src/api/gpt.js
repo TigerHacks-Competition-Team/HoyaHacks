@@ -17,7 +17,7 @@ export const queryPrompt = async (prompt) => {
                 presence_penalty: 0,
             }),
             headers: {
-                Authorization: `Bearer ${import.meta.env.OPENAI_API_KEY}`,
+                Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
                 "Content-Type": "application/json",
                 },
             method: "POST",
