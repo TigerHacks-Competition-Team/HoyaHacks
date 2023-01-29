@@ -19,25 +19,19 @@
 
     async function uploadYoutubeVideo() {
         if (!youtubeURL.match(/^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$/g)) return
-        
-        console.log(youtubeURL)
 
-        const body = JSON.stringify({
-                url: youtubeURL,
-			})
-
-        console.log(body)
-
-        const res = fetch('https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3', {
+        const resJson = await fetch('https://hkwrlworzfpsgkaxcobm.functions.supabase.co/yt2mp3', {
 			method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
             },
-			body: body
-		}).then(console.log)
+			body: JSON.stringify({
+                url: youtubeURL,
+			})
+		}).then((res) => res.json())
 
-        console.log(res)
+        console.log(resJson)
     }
 </script>
 
