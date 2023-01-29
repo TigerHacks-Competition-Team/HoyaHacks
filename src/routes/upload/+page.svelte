@@ -296,7 +296,7 @@
 </div>
 
 <div class="is-flex is-flex-direction-column" id="notes">
-    {#each sortedNotes as note}
+    {#each sortedNotes as note (note.id)}
         <Note
             {note}
             modalFunction={loadNoteModal}

@@ -25,13 +25,13 @@
     on:click={() => modalFunction(note)}
     on:keydown={e => {if (e.key == "Enter") modalFunction(note)}}
 >
-    <img src="https://i.ytimg.com/vi/{ytId}/hq720.jpg" alt="" class="thumbnail">
+    <img src="https://i.ytimg.com/vi/{ytId}/hqdefault.jpg" alt="" class="thumbnail">
     <div class="note-info is-flex is-flex-direction-column my-4">
         <p class="title is-5">{note.title || "Generating Title..."}</p>
         <a href="{note.video_link}">Source: {note.video_link}</a>
         <p class="created">Created on {date}</p>
-        <p class="status">{note.state}</p>
-        {#if loading}
+        <p class="status" data-loading={note.state != "Complete"}>{note.state}</p>
+        {#if note.state != "Complete"}
             <div class="loading"></div>
         {:else}
             <p class="preview">{dataShort}</p>
