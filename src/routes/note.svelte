@@ -5,7 +5,7 @@
     export let note: Object;
 
     const ytRegex = /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
-    let matches = note.link?.match(ytRegex)
+    let matches = note.video_link?.match(ytRegex)
     let id = matches ? matches[1] : null;
 
         let dataShort = note.notes;
