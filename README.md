@@ -1,38 +1,21 @@
-# create-svelte
+# AutoScribe
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is **AutoScribe**, our submission for HoyaHacks 2023.
 
-## Creating a project
+## Purpose
 
-If you're seeing this, you've probably already done this step. Congrats!
+AutoScribe is a webapp intended to help students process information and review content. To use AutoScribe, users paste YouTube links or upload videos to the site. The backend will extract the audio and create a transcription. Then, it will use GPT-3 to take notes / create a summary of the video. This can all be managed through a user-friendly frontend.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Technologies
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+AutoScribe's frontend is coded in [Svelte](https://svelte.dev/) and [SvelteKit](https://svelte.dev/), JavaScript libraries. It also uses [Sass](https://sass-lang.com/), a CSS preprocessor, and [Bulma](https://bulma.io), a CSS/SASS libary.
 
-## Developing
+## Running Locally
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To run AutoScribe locally, clone the repository and run install the dependencies with `npm install`, then run the frontend with `npm run dev`. This will start a server on <http://localhost:5173/>
 
-```bash
-npm run dev
+## Other Services
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+For the backend, AutoScribe uses a Kubernetes cluster (hosted on Google Cloud) to manage downloading of YouTube videos, as well as audio extraction. You can find the code for that in [TigerHacks-Competition-Team/HoyaHacksKub](https://github.com/TigerHacks-Competition-Team/HoyaHacksKub)
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+AutoScribe also uses Google Cloud for transcribing, specifically Google Cloud's transcription service. The code for that, along with some other stuff, is in [TigerHacks-Competition-Team/HoyaHacksCloud](https://github.com/TigerHacks-Competition-Team/HoyaHacksCloud)
